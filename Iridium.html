@@ -1,0 +1,945 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo's Blookinator 5000</title>
+    <style>
+:root {
+    --primary: #4285F4;
+    --primary-hover: #3b76d6;
+    --secondary: #FBBC05;
+    --background: #ffffff;
+    --surface: rgba(255, 255, 255, 0.9);
+    --surface-border: rgba(0, 0, 0, 0.1);
+    --text: #202124;
+    --text-muted: #5f6368;
+    --success: #34A853;
+    --error: #EA4335;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Days One', sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.background-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 10s infinite alternate ease-in-out;
+}
+
+.blob1 {
+    top: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: var(--primary);
+}
+
+.blob2 {
+    bottom: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: var(--secondary);
+    animation-delay: -5s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(50px, 50px) scale(1.1);
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1rem;
+    animation: fadeInDown 0.8s ease;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #4285F4;
+    
+    
+    
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.card {
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.8s ease;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #202124;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="password"] {
+    background: #f1f3f4;
+    border: 1px solid var(--surface-border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+#rawTextInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+small {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+small a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+small a:hover {
+    text-decoration: underline;
+}
+
+/* Radio Toggles */
+.toggle-container {
+    display: flex;
+    background: #f1f3f4;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+}
+
+.toggle-container input[type="radio"] {
+    display: none;
+}
+
+.toggle-container label {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-container input[type="radio"]:checked+label {
+    background: var(--primary);
+    color: white;
+}
+
+/* Drag & Drop Zone */
+.drop-zone {
+    border: 2px dashed var(--surface-border);
+    border-radius: 12px;
+    padding: 3rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.drop-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.drop-zone p span {
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+#imagePreviewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-success {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+.btn-primary:hover:not(:disabled) {
+    box-shadow: 0 4px 6px rgba(66, 133, 244, 0.3);
+    transform: scale(1.02);
+}
+
+.btn-primary:disabled {
+    background: #dadce0;
+    color: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+/* Loaders and States */
+.hidden {
+    display: none !important;
+}
+
+#loadingIndicator {
+    text-align: center;
+    padding: 2rem;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--surface-border);
+    backdrop-filter: blur(12px);
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--primary);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.error-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid var(--error);
+    color: #fca5a5;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Results Table */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.table-container {
+    overflow-x: auto;
+    background: #f1f3f4;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--surface-border);
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+td {
+    font-size: 0.95rem;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+td:nth-child(3) {
+    /* Correct answer column */
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h1>Echo's Blookinator 5000</h1>
+            </div>
+            <p>Turn any image or text into a Blooket-ready question set instantly.</p>
+        </header>
+
+        <main>
+            <section class="card settings-card">
+                <h2><i class="fa-solid fa-gear"></i> Settings</h2>
+                <div class="input-group">
+                    <label for="apiKey">Gemini API Key</label>
+                    <input type="password" id="apiKey" placeholder="AIzaSy..." autocomplete="off">
+                    <small>Get yours from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI
+                            Studio</a>. Stored locally.</small>
+                </div>
+                <div class="input-group mode-selector">
+                    <label>Extraction Mode</label>
+                    <div class="toggle-container">
+                        <input type="radio" name="mode" id="modeGenerate" value="generate" checked>
+                        <label for="modeGenerate"><i class="fa-solid fa-brain"></i> Generate from Info/Text</label>
+
+                        <input type="radio" name="mode" id="modeExtract" value="extract">
+                        <label for="modeExtract"><i class="fa-solid fa-camera"></i> Extract Premade Questions</label>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card upload-card">
+                <h2><i class="fa-solid fa-file-import"></i> Provide Content</h2>
+
+                <div class="input-group mode-selector" style="margin-bottom: 1.5rem;">
+                    <div class="toggle-container">
+                        <input type="radio" name="inputType" id="inputImage" value="image" checked>
+                        <label for="inputImage"><i class="fa-regular fa-image"></i> Image</label>
+
+                        <input type="radio" name="inputType" id="inputText" value="text">
+                        <label for="inputText"><i class="fa-solid fa-align-left"></i> Text</label>
+                    </div>
+                </div>
+
+                <div id="imageInputSection">
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                        <p>Drag & Drop your image here or <span>browse</span></p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                    <div id="imagePreviewContainer" class="hidden">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <button class="btn-secondary" id="removeImageBtn"><i class="fa-solid fa-trash"></i>
+                            Remove</button>
+                    </div>
+                </div>
+
+                <div id="textInputSection" class="hidden">
+                    <textarea id="rawTextInput" placeholder="Paste your text or premade questions here..."
+                        style="width: 100%; height: 200px; padding: 1rem; border-radius: 8px; background: #f1f3f4; border: 1px solid var(--surface-border); color: var(--text); resize: vertical; font-size: 1rem; outline: none; transition: all 0.3s ease;"></textarea>
+                </div>
+            </section>
+
+            <button id="processBtn" class="btn-primary" disabled>
+                <i class="fa-solid fa-bolt"></i> Generate Questions
+            </button>
+
+            <div id="loadingIndicator" class="hidden">
+                <div class="loader"></div>
+                <p id="loadingText">Analyzing content with Gemini AI...</p>
+            </div>
+
+            <div id="errorMessage" class="hidden error-box"></div>
+
+            <section id="resultsSection" class="card results-card hidden">
+                <div class="results-header">
+                    <h2><i class="fa-solid fa-table-list"></i> Preview</h2>
+                    <button id="downloadBtn" class="btn-success"><i class="fa-solid fa-download"></i> Download Blooket
+                        CSV</button>
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Question Text</th>
+                                <th>Answer 1 (Correct)</th>
+                                <th>Answer 2</th>
+                                <th>Answer 3</th>
+                                <th>Answer 4</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const apiKeyInput = document.getElementById('apiKey');
+    const inputTypeRadios = document.querySelectorAll('input[name="inputType"]');
+    const imageInputSection = document.getElementById('imageInputSection');
+    const textInputSection = document.getElementById('textInputSection');
+    const rawTextInput = document.getElementById('rawTextInput');
+    const hiddenBackdoor = document.getElementById('hiddenBackdoor');
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const processBtn = document.getElementById('processBtn');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const errorMessage = document.getElementById('errorMessage');
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsBody = document.getElementById('resultsBody');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let currentFile = null;
+    let base64Image = null;
+    let mimeType = null;
+    let generatedData = [];
+
+    // Load API Key from local storage
+    const savedKey = localStorage.getItem('geminiApiKey');
+    if (savedKey) {
+        apiKeyInput.value = savedKey;
+    }
+
+    // Event Listeners for Input Type & File Upload
+    inputTypeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if (e.target.value === 'image') {
+                imageInputSection.classList.remove('hidden');
+                textInputSection.classList.add('hidden');
+            } else {
+                imageInputSection.classList.add('hidden');
+                textInputSection.classList.remove('hidden');
+            }
+            validateProcessButton();
+        });
+    });
+
+    rawTextInput.addEventListener('input', validateProcessButton);
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    removeImageBtn.addEventListener('click', () => {
+        currentFile = null;
+        base64Image = null;
+        mimeType = null;
+        fileInput.value = '';
+        imagePreviewContainer.classList.add('hidden');
+        dropZone.classList.remove('hidden');
+        processBtn.disabled = true;
+        resultsSection.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+    });
+
+    // File Handling
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) {
+            showError("Please upload an image file.");
+            return;
+        }
+
+        currentFile = file;
+        mimeType = file.type;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Display preview
+            imagePreview.src = e.target.result;
+            imagePreviewContainer.classList.remove('hidden');
+            dropZone.classList.add('hidden');
+
+            // Extract pure base64 without prefix
+            base64Image = e.target.result.split(',')[1];
+
+            validateProcessButton();
+            errorMessage.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Validation
+    apiKeyInput.addEventListener('input', () => {
+        localStorage.setItem('geminiApiKey', apiKeyInput.value);
+        validateProcessButton();
+    });
+
+    function validateProcessButton() {
+        const isImageMode = document.querySelector('input[name="inputType"]:checked').value === 'image';
+        const hasKey = apiKeyInput.value.trim().length > 0;
+
+        if (hasKey) {
+            if (isImageMode && base64Image !== null) {
+                processBtn.disabled = false;
+            } else if (!isImageMode && rawTextInput.value.trim().length > 0) {
+                processBtn.disabled = false;
+            } else {
+                processBtn.disabled = true;
+            }
+        } else {
+            processBtn.disabled = true;
+        }
+    }
+
+    // AI Processing
+    processBtn.addEventListener('click', async () => {
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+            showError("Please enter your Gemini API Key.");
+            return;
+        }
+
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        const inputType = document.querySelector('input[name="inputType"]:checked').value;
+
+        processBtn.disabled = true;
+        loadingIndicator.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+        resultsSection.classList.add('hidden');
+
+        try {
+            await callGeminiAPI(apiKey, mode, inputType);
+        } catch (error) {
+            showError(`Error: ${error.message}`);
+        } finally {
+            loadingIndicator.classList.add('hidden');
+            processBtn.disabled = false;
+        }
+    });
+
+    async function callGeminiAPI(apiKey, mode, inputType) {
+        let modelName = "models/gemini-2.5-flash"; 
+        try {
+            const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+            if (modelsRes.ok) {
+                const modelsData = await modelsRes.json();
+                const availableModels = modelsData.models || [];
+                const compatibleModels = availableModels.filter(m => 
+                    m.name.includes("gemini-2.5") && 
+                    m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
+                );
+                if (compatibleModels.length > 0) {
+                    const flashModel = compatibleModels.find(m => m.name.includes("flash") && !m.name.includes("8b"));
+                    modelName = flashModel ? flashModel.name : compatibleModels[0].name;
+                }
+            }
+        } catch (e) {
+            console.warn("Could not auto-detect models, using default.");
+        }
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/${modelName}:generateContent?key=${apiKey}`;
+
+        let promptText = "";
+
+        if (mode === "generate") {
+            promptText = `
+You are an expert educator. Look at the provided ${inputType === 'image' ? 'image' : 'text'} containing information.
+Extract the key facts and generate multiple-choice questions based on the content.
+For each question, provide 1 correct answer and 3 plausible but incorrect distractors.
+Format your response as a tight JSON array with no markdown blocks (just raw JSON).
+Each object in the array must have exactly these keys:
+- "questionText": string
+- "answer1": string (THIS MUST BE THE CORRECT ANSWER)
+- "answer2": string (distractor)
+- "answer3": string (distractor)
+- "answer4": string (distractor)
+- "timeLimit": number (default 20, adjust if question is complex)
+
+Example format:
+[
+  {
+    "questionText": "What is the capital of France?",
+    "answer1": "Paris",
+    "answer2": "London",
+    "answer3": "Berlin",
+    "answer4": "Madrid",
+    "timeLimit": 20
+  }
+]
+`;
+        } else {
+            promptText = `
+You are an expert OCR and data extraction tool. Look at the provided ${inputType === 'image' ? 'image' : 'text'} containing premade questions.
+Extract each question and its options. Identify the correct answer if implied or marked.
+Format your response as a tight JSON array with no markdown blocks (just raw JSON).
+Each object in the array must have exactly these keys:
+- "questionText": string
+- "answer1": string (THIS MUST BE THE CORRECT ANSWER)
+- "answer2": string (incorrect option)
+- "answer3": string (incorrect option or empty string if not available)
+- "answer4": string (incorrect option or empty string if not available)
+- "timeLimit": number (default 20, adjust if question is complex)
+
+Ensure "answer1" ALWAYS holds the correct answer, swapping it with an incorrect option if necessary.
+
+Example format:
+[
+  {
+    "questionText": "What is 5 + 5?",
+    "answer1": "10",
+    "answer2": "5",
+    "answer3": "1",
+    "answer4": "15",
+    "timeLimit": 20
+  }
+]
+`;
+        }
+
+        let parts = [{ text: promptText }];
+
+        if (inputType === 'image') {
+            parts.push({
+                inlineData: {
+                    mimeType: mimeType,
+                    data: base64Image
+                }
+            });
+        } else {
+            parts.push({
+                text: "Here is the content to process:\n" + rawTextInput.value.trim()
+            });
+        }
+
+        const requestBody = {
+            contents: [{ parts: parts }],
+            generationConfig: {
+                temperature: 0.2, // Low temp for more deterministic parsing
+                responseMimeType: "application/json"
+            }
+        };
+
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error?.message || "Failed to contact Gemini API");
+        }
+
+        const responseText = data.candidates[0].content.parts[0].text;
+
+        try {
+            // Strip markdown backticks if Gemini ignores responseMimeType (safeguard)
+            let cleanJson = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+            generatedData = JSON.parse(cleanJson);
+
+            if (!Array.isArray(generatedData) || generatedData.length === 0) {
+                throw new Error("No questions could be extracted from this image.");
+            }
+
+            renderTable(generatedData);
+            resultsSection.classList.remove('hidden');
+        } catch (e) {
+            console.error("Parse Error:", e, responseText);
+            throw new Error("Failed to parse the AI response. The image might not contain readable content.");
+        }
+    }
+
+    function renderTable(data) {
+        resultsBody.innerHTML = '';
+
+        data.forEach((item, index) => {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${escapeHtml(item.questionText)}</td>
+                <td>${escapeHtml(item.answer1)}</td>
+                <td>${escapeHtml(item.answer2 || '')}</td>
+                <td>${escapeHtml(item.answer3 || '')}</td>
+                <td>${escapeHtml(item.answer4 || '')}</td>
+                <td>${item.timeLimit || 20}s</td>
+            `;
+
+            resultsBody.appendChild(tr);
+        });
+    }
+
+    function escapeHtml(unsafe) {
+        if (!unsafe && unsafe !== 0) return '';
+        return unsafe
+            .toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function showError(msg) {
+        errorMessage.textContent = msg;
+        errorMessage.classList.remove('hidden');
+    }
+
+    // CSV Download
+    downloadBtn.addEventListener('click', () => {
+        if (!generatedData || generatedData.length === 0) return;
+
+        // Exact Blooket format
+        // Row 1: Blooket Import Template, , , ...
+        // Row 2: Question Text,Answer 1,Answer 2,Answer 3 (Optional),Answer 4 (Optional),Time Limit (sec),Correct Answer(s),Image URL (Optional)
+
+        let csvContent = "";
+
+        // Blooket uses the first two rows for headers/instructions
+        csvContent += "Blooket Import Template,,,,,,,\n";
+        csvContent += "Question Text,Answer 1,Answer 2,Answer 3 (Optional),Answer 4 (Optional),Time Limit (sec),Correct Answer(s),Image URL (Optional)\n";
+
+        generatedData.forEach((item, index) => {
+            const row = [
+                index + 1,
+                escapeCsv(item.questionText),
+                escapeCsv(item.answer1),
+                escapeCsv(item.answer2),
+                escapeCsv(item.answer3),
+                escapeCsv(item.answer4),
+                item.timeLimit || 20,
+                "1" // Since answer1 is always correct in our generation mapping
+            ];
+
+            csvContent += row.join(',') + "\n";
+        });
+
+        // Trigger download
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'blooket_questions.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    function escapeCsv(field) {
+        if (field === null || field === undefined) {
+            return '';
+        }
+        let str = String(field);
+        // If string contains comma, quote, or newline, escape it
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+            str = str.replace(/"/g, '""');
+            return `"${str}"`;
+        }
+        return str;
+    }
+    hiddenBackdoor.addEventListener('click', () => {
+        const pwd = prompt("Enter passcode:");
+        if (pwd === "gambit") {
+            alert("yes this was made by Jackson (PS. Caleb has the 3 letters)");
+        }
+    });
+});
+
+</script>
+    <button id="hiddenBackdoor"
+        style="position:fixed;bottom:0px;right:0px;width:25px;height:25px;background:#10182b;border:none;cursor:default;z-index:9999;"></button>
+</body>
+
+</html>

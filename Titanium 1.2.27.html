@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo's Blookinator 5000</title>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --primary-hover: #3b76d6;
+            --secondary: #FBBC05;
+            --background: #ffffff;
+            --surface: rgba(255, 255, 255, 0.9);
+            --surface-border: rgba(0, 0, 0, 0.1);
+            --text: #202124;
+            --text-muted: #5f6368;
+            --success: #34A853;
+            --error: #EA4335;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Days One', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .background-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+        .blob1 {
+            top: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+        }
+
+        .blob2 {
+            bottom: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--secondary);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(50px, 50px) scale(1.1);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #4285F4;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #202124;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            background: #f1f3f4;
+            border: 1px solid var(--surface-border);
+            color: var(--text);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        #rawTextInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        small {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        small a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        small a:hover {
+            text-decoration: underline;
+        }
+
+        /* Radio Toggles */
+        .toggle-container {
+            display: flex;
+            background: #f1f3f4;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--surface-border);
+        }
+
+        .toggle-container input[type="radio"] {
+            display: none;
+        }
+
+        .toggle-container label {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-container input[type="radio"]:checked+label {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Drag & Drop Zone */
+        .drop-zone {
+            border: 2px dashed var(--surface-border);
+            border-radius: 12px;
+            padding: 3rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .drop-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone p span {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        #imagePreviewContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        #imageGallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .preview-thumb {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Buttons */
+        .btn-primary,
+        .btn-secondary,
+        .btn-success {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 4px 6px rgba(66, 133, 244, 0.3);
+            transform: scale(1.02);
+        }
+
+        .btn-primary:disabled {
+            background: #dadce0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Loaders and States */
+        .hidden {
+            display: none !important;
+        }
+
+        #loadingIndicator {
+            text-align: center;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(12px);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--error);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        /* Results Table */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #f1f3f4;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th,
+        td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:nth-child(3) {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Apple-Style Dock --- */
+        .apple-dock {
+            position: fixed;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #e8eaed;
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dock-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dock-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--primary);
+        }
+
+        /* Custom CSS Tooltip for Dock Buttons */
+        .dock-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--text);
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: normal;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 101;
+        }
+
+        .dock-btn::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 6px);
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent var(--text) transparent transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 101;
+        }
+
+        .dock-btn:hover::after,
+        .dock-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 450px;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.hidden .modal-content {
+            transform: translateY(-20px);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Background Elements -->
+    <div class="background-blobs">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+
+    <!-- Apple-Style Dock -->
+    <nav class="apple-dock">
+        <button class="dock-btn" data-tooltip="Settings" id="dockSettingsBtn">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+        <button class="dock-btn" data-tooltip="CSV Combiner" id="dockCsvBtn">
+            <i class="fa-solid fa-file-csv"></i>
+        </button>
+        <button class="dock-btn" data-tooltip="Tool 3">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+        </button>
+        <button class="dock-btn" data-tooltip="Tool 4">
+            <i class="fa-solid fa-toolbox"></i>
+        </button>
+    </nav>
+
+    <!-- Hidden input for combining CSVs -->
+    <input type="file" id="csvFileInput" accept=".csv" multiple hidden>
+
+    <!-- Main Container -->
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h1>Echo's Blookinator 5000</h1>
+            </div>
+            <p>Turn any image or text into a Blooket-ready question set instantly.</p>
+        </header>
+
+        <main>
+            <section class="card settings-card">
+                <h2><i class="fa-solid fa-gear"></i> Settings</h2>
+                <div class="input-group">
+                    <label for="apiKey">Gemini API Key</label>
+                    <input type="password" id="apiKey" placeholder="AIzaSy..." autocomplete="off">
+                    <small>Get yours from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI
+                            Studio</a>. Stored locally.</small>
+                </div>
+                <div class="input-group mode-selector">
+                    <label>Extraction Mode</label>
+                    <div class="toggle-container">
+                        <input type="radio" name="mode" id="modeGenerate" value="generate" checked>
+                        <label for="modeGenerate"><i class="fa-solid fa-brain"></i> Generate from Info/Text</label>
+
+                        <input type="radio" name="mode" id="modeExtract" value="extract">
+                        <label for="modeExtract"><i class="fa-solid fa-camera"></i> Extract Premade Questions</label>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card upload-card">
+                <h2><i class="fa-solid fa-file-import"></i> Provide Content</h2>
+
+                <div class="input-group mode-selector" style="margin-bottom: 1.5rem;">
+                    <div class="toggle-container">
+                        <input type="radio" name="inputType" id="inputImage" value="image" checked>
+                        <label for="inputImage"><i class="fa-regular fa-image"></i> Images</label>
+
+                        <input type="radio" name="inputType" id="inputText" value="text">
+                        <label for="inputText"><i class="fa-solid fa-align-left"></i> Text</label>
+                    </div>
+                </div>
+
+                <div id="imageInputSection">
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                        <p>Drag & Drop your images here or <span>browse</span></p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                    <div id="imagePreviewContainer" class="hidden">
+                        <div id="imageGallery">
+                            <!-- Populated dynamically via JS with .preview-thumb -->
+                        </div>
+                        <button class="btn-secondary" id="removeImageBtn" style="margin-top: 1rem;"><i
+                                class="fa-solid fa-trash"></i> Clear Images</button>
+                    </div>
+                </div>
+
+                <div id="textInputSection" class="hidden">
+                    <textarea id="rawTextInput" placeholder="Paste your text or premade questions here..."
+                        style="width: 100%; height: 200px; padding: 1rem; border-radius: 8px; background: #f1f3f4; border: 1px solid var(--surface-border); color: var(--text); resize: vertical; font-size: 1rem; outline: none; transition: all 0.3s ease;"></textarea>
+                </div>
+            </section>
+
+            <button id="processBtn" class="btn-primary" disabled>
+                <i class="fa-solid fa-bolt"></i> Generate Questions
+            </button>
+
+            <div id="loadingIndicator" class="hidden">
+                <div class="loader"></div>
+                <p id="loadingText">Analyzing content...</p>
+            </div>
+
+            <div id="errorMessage" class="hidden error-box"></div>
+
+            <section id="resultsSection" class="card results-card hidden">
+                <div class="results-header">
+                    <h2><i class="fa-solid fa-table-list"></i> Preview</h2>
+                    <button id="downloadBtn" class="btn-success"><i class="fa-solid fa-download"></i> Download Blooket
+                        CSV</button>
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Question Text</th>
+                                <th>Answer 1 (Correct)</th>
+                                <th>Answer 2</th>
+                                <th>Answer 3</th>
+                                <th>Answer 4</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Additional Settings Modal -->
+    <div id="extendedSettingsModal" class="modal-overlay hidden">
+        <div class="card modal-content">
+            <h2><i class="fa-solid fa-sliders"></i> Advanced Options</h2>
+
+            <div class="input-group">
+                <label for="openRouterKey">OpenRouter API Key (Unbound)</label>
+                <input type="password" id="openRouterKey" placeholder="sk-or-v1-..." autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label for="openRouterModel">OpenRouter Model (Unbound)</label>
+                <select id="openRouterModel">
+                    <option value="meta-llama/llama-3-8b-instruct">Meta: Llama 3 8B Instruct</option>
+                    <option value="anthropic/claude-3-haiku">Anthropic: Claude 3 Haiku</option>
+                    <option value="openai/gpt-4o-mini">OpenAI: GPT-4o-Mini</option>
+                </select>
+            </div>
+
+            <div class="input-group" style="margin-top: 0.5rem;">
+                <label for="imagesPerPrompt">Images to send per prompt</label>
+                <input type="number" id="imagesPerPrompt" value="5" min="1" max="100">
+                <small>Select how many of your uploaded images to send at once to the AI.</small>
+            </div>
+
+            <button id="closeSettingsModal" class="btn-primary" style="margin-top: 1.5rem;">Save & Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const apiKeyInput = document.getElementById('apiKey');
+            const openRouterKeyInput = document.getElementById('openRouterKey');
+            const openRouterModelSelect = document.getElementById('openRouterModel');
+
+            const inputTypeRadios = document.querySelectorAll('input[name="inputType"]');
+            const imageInputSection = document.getElementById('imageInputSection');
+            const textInputSection = document.getElementById('textInputSection');
+            const rawTextInput = document.getElementById('rawTextInput');
+            const hiddenBackdoor = document.getElementById('hiddenBackdoor');
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const imageGallery = document.getElementById('imageGallery');
+            const removeImageBtn = document.getElementById('removeImageBtn');
+            const processBtn = document.getElementById('processBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorMessage = document.getElementById('errorMessage');
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsBody = document.getElementById('resultsBody');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // Modal & Dock Elements
+            const dockSettingsBtn = document.getElementById('dockSettingsBtn');
+            const dockCsvBtn = document.getElementById('dockCsvBtn');
+            const csvFileInput = document.getElementById('csvFileInput');
+            const extendedSettingsModal = document.getElementById('extendedSettingsModal');
+            const closeSettingsModal = document.getElementById('closeSettingsModal');
+            const imagesPerPromptInput = document.getElementById('imagesPerPrompt');
+
+            // State Variables
+            let base64Images = [];
+            let generatedData = [];
+
+            // Load Saved Settings from Local Storage
+            const savedGeminiKey = localStorage.getItem('geminiApiKey');
+            if (savedGeminiKey) apiKeyInput.value = savedGeminiKey;
+
+            const savedOrKey = localStorage.getItem('openRouterApiKey');
+            if (savedOrKey) openRouterKeyInput.value = savedOrKey;
+
+            const savedOrModel = localStorage.getItem('openRouterModel');
+            if (savedOrModel) openRouterModelSelect.value = savedOrModel;
+
+            // Input Validation Listeners
+            apiKeyInput.addEventListener('input', () => {
+                localStorage.setItem('geminiApiKey', apiKeyInput.value);
+                validateProcessButton();
+            });
+
+            openRouterKeyInput.addEventListener('input', () => {
+                localStorage.setItem('openRouterApiKey', openRouterKeyInput.value);
+                validateProcessButton();
+            });
+
+            openRouterModelSelect.addEventListener('change', () => {
+                localStorage.setItem('openRouterModel', openRouterModelSelect.value);
+            });
+
+            // Modal Events
+            dockSettingsBtn.addEventListener('click', () => {
+                extendedSettingsModal.classList.remove('hidden');
+            });
+
+            closeSettingsModal.addEventListener('click', () => {
+                extendedSettingsModal.classList.add('hidden');
+            });
+
+            // --- CSV Combiner Feature ---
+            dockCsvBtn.addEventListener('click', () => {
+                csvFileInput.click();
+            });
+
+            csvFileInput.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                if (files.length < 2) {
+                    alert("Please select at least 2 CSV files to combine.");
+                    return;
+                }
+
+                try {
+                    let combinedCsv = "";
+                    for (let i = 0; i < files.length; i++) {
+                        const text = await files[i].text();
+                        const lines = text.split('\n');
+
+                        if (i === 0) {
+                            // Keep everything including headers for the first file
+                            combinedCsv += text + (text.endsWith('\n') ? '' : '\n');
+                        } else {
+                            // Strip Blooket Headers for subsequent files (typically first 2 rows)
+                            const startIdx = (lines[0] && lines[0].includes('Blooket Import Template')) ? 2 : 0;
+                            for (let j = startIdx; j < lines.length; j++) {
+                                if (lines[j].trim() !== "") {
+                                    combinedCsv += lines[j] + '\n';
+                                }
+                            }
+                        }
+                    }
+
+                    // Download combined CSV
+                    const blob = new Blob([combinedCsv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'combined_blooket_questions.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                } catch (err) {
+                    alert("Failed to combine CSVs: " + err.message);
+                }
+
+                // Reset input
+                csvFileInput.value = '';
+            });
+
+            // Event Listeners for Input Type & File Upload
+            inputTypeRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'image') {
+                        imageInputSection.classList.remove('hidden');
+                        textInputSection.classList.add('hidden');
+                    } else {
+                        imageInputSection.classList.add('hidden');
+                        textInputSection.classList.remove('hidden');
+                    }
+                    validateProcessButton();
+                });
+            });
+
+            rawTextInput.addEventListener('input', validateProcessButton);
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFiles(e.target.files);
+                }
+            });
+
+            removeImageBtn.addEventListener('click', () => {
+                base64Images = [];
+                fileInput.value = '';
+                imageGallery.innerHTML = '';
+                imagePreviewContainer.classList.add('hidden');
+                dropZone.classList.remove('hidden');
+                processBtn.disabled = true;
+                resultsSection.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+            });
+
+            // Handling Multiple Files
+            function handleFiles(files) {
+                let filesProcessed = 0;
+                const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+
+                if (validFiles.length === 0) {
+                    showError("Please upload valid image files.");
+                    return;
+                }
+
+                validFiles.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const b64 = e.target.result.split(',')[1];
+                        base64Images.push({
+                            mimeType: file.type,
+                            base64: b64,
+                            src: e.target.result
+                        });
+
+                        filesProcessed++;
+                        if (filesProcessed === validFiles.length) {
+                            renderGallery();
+                            imagePreviewContainer.classList.remove('hidden');
+                            dropZone.classList.add('hidden');
+                            validateProcessButton();
+                            errorMessage.classList.add('hidden');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            function renderGallery() {
+                imageGallery.innerHTML = '';
+                base64Images.forEach(imgData => {
+                    const img = document.createElement('img');
+                    img.src = imgData.src;
+                    img.className = 'preview-thumb';
+                    img.alt = 'Uploaded Image';
+                    imageGallery.appendChild(img);
+                });
+            }
+
+            // Validation Logic Check (Prioritizes either API Key)
+            function validateProcessButton() {
+                const isImageMode = document.querySelector('input[name="inputType"]:checked').value === 'image';
+                const hasKey = apiKeyInput.value.trim().length > 0 || openRouterKeyInput.value.trim().length > 0;
+
+                if (hasKey) {
+                    if (isImageMode && base64Images.length > 0) {
+                        processBtn.disabled = false;
+                    } else if (!isImageMode && rawTextInput.value.trim().length > 0) {
+                        processBtn.disabled = false;
+                    } else {
+                        processBtn.disabled = true;
+                    }
+                } else {
+                    processBtn.disabled = true;
+                }
+            }
+
+            // Global Process Button Trigger
+            processBtn.addEventListener('click', async () => {
+                const geminiKey = apiKeyInput.value.trim();
+                const orKey = openRouterKeyInput.value.trim();
+
+                if (!geminiKey && !orKey) {
+                    showError("Please enter either a Gemini or OpenRouter API Key.");
+                    return;
+                }
+
+                const mode = document.querySelector('input[name="mode"]:checked').value;
+                const inputType = document.querySelector('input[name="inputType"]:checked').value;
+
+                processBtn.disabled = true;
+                loadingIndicator.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+                resultsSection.classList.add('hidden');
+
+                try {
+                    // OpenRouter takes priority if a key is provided
+                    if (orKey) {
+                        await callOpenRouterAPI(orKey, openRouterModelSelect.value, mode, inputType);
+                    } else {
+                        await callGeminiAPI(geminiKey, mode, inputType);
+                    }
+                } catch (error) {
+                    showError(`Error: ${error.message}`);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                    processBtn.disabled = false;
+                }
+            });
+
+            // --- OpenRouter API Function ---
+            async function callOpenRouterAPI(apiKey, model, mode, inputType) {
+                let promptText = getSystemPrompt(mode, inputType);
+                promptText += "\n\nIMPORTANT: Return ONLY a valid raw JSON array containing your output objects. Do not wrap it in markdown code blocks.";
+
+                let messagesContent = [];
+
+                if (inputType === 'image') {
+                    messagesContent.push({ type: "text", text: promptText });
+                    const limit = parseInt(imagesPerPromptInput.value) || base64Images.length;
+                    const imagesToSend = base64Images.slice(0, limit);
+
+                    imagesToSend.forEach(imgData => {
+                        messagesContent.push({
+                            type: "image_url",
+                            image_url: {
+                                url: imgData.src // Includes data:image/... prefix for OpenAI Vision format
+                            }
+                        });
+                    });
+                } else {
+                    messagesContent.push({
+                        type: "text",
+                        text: promptText + "\n\nHere is the content to process:\n" + rawTextInput.value.trim()
+                    });
+                }
+
+                const requestBody = {
+                    model: model,
+                    messages: [
+                        {
+                            role: "user",
+                            content: messagesContent
+                        }
+                    ],
+                    temperature: 0.2
+                };
+
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'Blookinator 5000',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error?.message || "Failed to contact OpenRouter API");
+                }
+
+                const responseText = data.choices[0].message.content;
+                parseAIResponse(responseText);
+            }
+
+            // --- Gemini API Function ---
+            async function callGeminiAPI(apiKey, mode, inputType) {
+                let modelName = "models/gemini-2.5-flash";
+                try {
+                    const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                    if (modelsRes.ok) {
+                        const modelsData = await modelsRes.json();
+                        const availableModels = modelsData.models || [];
+                        const compatibleModels = availableModels.filter(m =>
+                            m.name.includes("gemini-2.5") &&
+                            m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
+                        );
+                        if (compatibleModels.length > 0) {
+                            const flashModel = compatibleModels.find(m => m.name.includes("flash") && !m.name.includes("8b"));
+                            modelName = flashModel ? flashModel.name : compatibleModels[0].name;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not auto-detect models, using default.");
+                }
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/${modelName}:generateContent?key=${apiKey}`;
+
+                let promptText = getSystemPrompt(mode, inputType);
+                let parts = [{ text: promptText }];
+
+                if (inputType === 'image') {
+                    const limit = parseInt(imagesPerPromptInput.value) || base64Images.length;
+                    const imagesToSend = base64Images.slice(0, limit);
+
+                    imagesToSend.forEach(imgData => {
+                        parts.push({
+                            inlineData: {
+                                mimeType: imgData.mimeType,
+                                data: imgData.base64
+                            }
+                        });
+                    });
+                } else {
+                    parts.push({
+                        text: "Here is the content to process:\n" + rawTextInput.value.trim()
+                    });
+                }
+
+                const requestBody = {
+                    contents: [{ parts: parts }],
+                    generationConfig: {
+                        temperature: 0.2,
+                        responseMimeType: "application/json"
+                    }
+                };
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error?.message || "Failed to contact Gemini API");
+                }
+
+                const responseText = data.candidates[0].content.parts[0].text;
+                parseAIResponse(responseText);
+            }
+
+            // Universal Prompt Generator
+            function getSystemPrompt(mode, inputType) {
+                if (mode === "generate") {
+                    return `
+You are an expert educator. Look at the provided ${inputType === 'image' ? 'image(s)' : 'text'} containing information.
+Extract the key facts and generate multiple-choice questions based on the content.
+For each question, provide 1 correct answer and 3 plausible but incorrect distractors.
+Format your response as a tight JSON array with no markdown blocks (just raw JSON).
+Each object in the array must have exactly these keys:
+- "questionText": string
+- "answer1": string (THIS MUST BE THE CORRECT ANSWER)
+- "answer2": string (distractor)
+- "answer3": string (distractor)
+- "answer4": string (distractor)
+- "timeLimit": number (default 20, adjust if question is complex)
+
+Example format:
+[
+  {
+    "questionText": "What is the capital of France?",
+    "answer1": "Paris",
+    "answer2": "London",
+    "answer3": "Berlin",
+    "answer4": "Madrid",
+    "timeLimit": 20
+  }
+]
+`;
+                } else {
+                    return `
+You are an expert OCR and data extraction tool. Look at the provided ${inputType === 'image' ? 'image(s)' : 'text'} containing premade questions.
+Extract each question and its options. Identify the correct answer if implied or marked.
+Format your response as a tight JSON array with no markdown blocks (just raw JSON).
+Each object in the array must have exactly these keys:
+- "questionText": string
+- "answer1": string (THIS MUST BE THE CORRECT ANSWER)
+- "answer2": string (incorrect option)
+- "answer3": string (incorrect option or empty string if not available)
+- "answer4": string (incorrect option or empty string if not available)
+- "timeLimit": number (default 20, adjust if question is complex)
+
+Ensure "answer1" ALWAYS holds the correct answer, swapping it with an incorrect option if necessary.
+
+Example format:
+[
+  {
+    "questionText": "What is 5 + 5?",
+    "answer1": "10",
+    "answer2": "5",
+    "answer3": "1",
+    "answer4": "15",
+    "timeLimit": 20
+  }
+]
+`;
+                }
+            }
+
+            // Shared Response Parser
+            function parseAIResponse(responseText) {
+                try {
+                    // Extract JSON array robustly
+                    let cleanJson = responseText.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim();
+                    const startIndex = cleanJson.indexOf('[');
+                    const endIndex = cleanJson.lastIndexOf(']');
+                    if (startIndex !== -1 && endIndex !== -1) {
+                        cleanJson = cleanJson.substring(startIndex, endIndex + 1);
+                    }
+
+                    generatedData = JSON.parse(cleanJson);
+
+                    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+                        throw new Error("No questions could be extracted from this content.");
+                    }
+
+                    renderTable(generatedData);
+                    resultsSection.classList.remove('hidden');
+                } catch (e) {
+                    console.error("Parse Error:", e, responseText);
+                    throw new Error("Failed to parse the AI response. The generated content wasn't a valid readable format.");
+                }
+            }
+
+            function renderTable(data) {
+                resultsBody.innerHTML = '';
+
+                data.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+
+                    tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${escapeHtml(item.questionText)}</td>
+                <td>${escapeHtml(item.answer1)}</td>
+                <td>${escapeHtml(item.answer2 || '')}</td>
+                <td>${escapeHtml(item.answer3 || '')}</td>
+                <td>${escapeHtml(item.answer4 || '')}</td>
+                <td>${item.timeLimit || 20}s</td>
+            `;
+
+                    resultsBody.appendChild(tr);
+                });
+            }
+
+            function escapeHtml(unsafe) {
+                if (!unsafe && unsafe !== 0) return '';
+                return unsafe
+                    .toString()
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            function showError(msg) {
+                errorMessage.textContent = msg;
+                errorMessage.classList.remove('hidden');
+            }
+
+            // CSV Download Feature
+            downloadBtn.addEventListener('click', () => {
+                if (!generatedData || generatedData.length === 0) return;
+
+                let csvContent = "";
+                csvContent += "Blooket Import Template,,,,,,,\n";
+                csvContent += "Question Text,Answer 1,Answer 2,Answer 3 (Optional),Answer 4 (Optional),Time Limit (sec),Correct Answer(s),Image URL (Optional)\n";
+
+                generatedData.forEach((item, index) => {
+                    const row = [
+                        index + 1,
+                        escapeCsv(item.questionText),
+                        escapeCsv(item.answer1),
+                        escapeCsv(item.answer2),
+                        escapeCsv(item.answer3),
+                        escapeCsv(item.answer4),
+                        item.timeLimit || 20,
+                        "1"
+                    ];
+
+                    csvContent += row.join(',') + "\n";
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'blooket_questions.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            function escapeCsv(field) {
+                if (field === null || field === undefined) {
+                    return '';
+                }
+                let str = String(field);
+                if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                    str = str.replace(/"/g, '""');
+                    return `"${str}"`;
+                }
+                return str;
+            }
+
+            if (hiddenBackdoor) {
+                hiddenBackdoor.addEventListener('click', () => {
+                    const pwd = prompt("Enter passcode:");
+                    if (pwd === "gambit") {
+                        alert("yes this was made by Jackson (PS. Caleb has the 3 letters)");
+                    }
+                });
+            }
+        });
+    </script>
+    <button id="hiddenBackdoor"
+        style="position:fixed;bottom:0px;right:0px;width:25px;height:25px;background:#FFFFFF00;border:none;cursor:default;z-index:9999;"></button>
+</body>
+
+</html>
